@@ -96,9 +96,9 @@
           }
         }, {
           "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
-          "in" : "query",
-          "name" : "entityID",
-          "required" : false,
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
           "schema" : {
             "type" : "string"
           }
@@ -156,7 +156,7 @@
           }
         }, {
           "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
-          "in" : "query",
+          "in" : "path",
           "name" : "entityId",
           "required" : true,
           "schema" : {
@@ -225,7 +225,7 @@
           }
         }, {
           "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
-          "in" : "query",
+          "in" : "path",
           "name" : "entityId",
           "required" : true,
           "schema" : {
@@ -272,7 +272,7 @@
         "operationId" : "GetChartAccounts",
         "parameters" : [ {
           "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
-          "in" : "query",
+          "in" : "path",
           "name" : "entityId",
           "required" : true,
           "schema" : {
@@ -320,6 +320,14 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -362,6 +370,14 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -394,7 +410,7 @@
     },
     "/Entities/{entityId}/AR/Invoices" : {
       "get" : {
-        "description" : "Invoices has one record for each sales order associated with each invoice. For example, if an invoice includes items from three sales orders, there will be three records for that invoice—one for the items in the invoice associated with each of the three sales orders.\n",
+        "description" : "Invoices has one record for each sales order associated with each invoice. For example, if an invoice includes items from three sales orders, there will be three records for that one invoice. The invoice will include the associated three sales orders.\n",
         "operationId" : "GetARInvoices",
         "parameters" : [ {
           "description" : "Identifier of the customer from whom payment is expected or to whom unused credits have been applied.",
@@ -420,6 +436,14 @@
           "required" : true,
           "schema" : {
             "format" : "date",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
             "type" : "string"
           }
         } ],
