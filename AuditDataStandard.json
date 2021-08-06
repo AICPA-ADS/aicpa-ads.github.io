@@ -555,7 +555,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Customers"
+                  "$ref" : "#/components/schemas/Suppliers"
                 }
               }
             },
@@ -1035,6 +1035,77 @@
           },
           "amountCreditDebitIndicator" : {
             "$ref" : "#/components/schemas/CreditDebitIndicator"
+          }
+        },
+        "type" : "object"
+      },
+      "Suppliers" : {
+        "items" : {
+          "$ref" : "#/components/schemas/Supplier"
+        },
+        "type" : "array"
+      },
+      "Supplier" : {
+        "properties" : {
+          "supplierAccountId" : {
+            "$ref" : "#/components/schemas/SupplierAccountID"
+          },
+          "supplierAccountName" : {
+            "$ref" : "#/components/schemas/CustomerAccountName"
+          },
+          "supplierTIN" : {
+            "$ref" : "#/components/schemas/CustomerTIN"
+          },
+          "supplierPhysicalStreetAddress1" : {
+            "$ref" : "#/components/schemas/CustomerStreetAddress1"
+          },
+          "supplierPhysicalStreetAddress2" : {
+            "$ref" : "#/components/schemas/CustomerStreetAddress2"
+          },
+          "supplierPhysicalCity" : {
+            "$ref" : "#/components/schemas/CustomerCity"
+          },
+          "supplierPhysicalZipPostalCode" : {
+            "$ref" : "#/components/schemas/CustomerPhysicalPostalCode"
+          },
+          "supplierPhysicalCountry" : {
+            "$ref" : "#/components/schemas/CustomerCountry"
+          },
+          "supplierBillingAddress1" : {
+            "$ref" : "#/components/schemas/CustomerBillingAddress1"
+          },
+          "supplierBillingAddress2" : {
+            "$ref" : "#/components/schemas/CustomerBillingAddress2"
+          },
+          "supplierBillingCity" : {
+            "$ref" : "#/components/schemas/CustomerBillingCity"
+          },
+          "supplierBillingZipPostalCode" : {
+            "$ref" : "#/components/schemas/CustomerBillingPostalCode"
+          },
+          "supplierBillingCountry" : {
+            "$ref" : "#/components/schemas/CustomerBillingCountry"
+          },
+          "supplierEmail" : {
+            "$ref" : "#/components/schemas/CustomerEmail"
+          },
+          "supplierDomainAddress" : {
+            "$ref" : "#/components/schemas/CustomerDomainAddress"
+          },
+          "supplierActiveStatus" : {
+            "$ref" : "#/components/schemas/CustomerActiveStatus"
+          },
+          "transactionCreditLimit" : {
+            "$ref" : "#/components/schemas/TransactionCreditLimit"
+          },
+          "supplierCreditLimit" : {
+            "$ref" : "#/components/schemas/CustomerCreditLimit"
+          },
+          "supplierTermsDueDays" : {
+            "$ref" : "#/components/schemas/CustomerTermsDueDays"
+          },
+          "supplierEnteredBy" : {
+            "$ref" : "#/components/schemas/EnteredBy"
           }
         },
         "type" : "object"
