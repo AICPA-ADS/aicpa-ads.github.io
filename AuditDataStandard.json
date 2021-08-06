@@ -28,6 +28,9 @@
   }, {
     "description" : "Used to request AR Information",
     "name" : "Accounts Receivable"
+  }, {
+    "description" : "Used to request AP Information",
+    "name" : "Accounts Payable"
   } ],
   "paths" : {
     "/Entities" : {
@@ -475,6 +478,174 @@
         },
         "tags" : [ "Accounts Receivable" ]
       }
+    },
+    "/Entities/{entityId}/AP/OpenBalances" : {
+      "get" : {
+        "description" : "\nEach record represents the balance due to the supplier for one uniquely identifiable transaction. This file should be at the summary level (by invoice), not at the detailed level (by invoice line item). The sum total of the transaction amounts as of the specified date should reconcile to the total AP amount in the general ledger (GL) as of the same date. \nShould be able to pass a date and get back a list of all the invoices amounts that were outstanding at that date.\n",
+        "operationId" : "GetAPOpenAccountsPayable",
+        "parameters" : [ {
+          "description" : "Open payables on a given date.",
+          "in" : "query",
+          "name" : "balanceDate",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/APOpenAccountsPayableItems"
+                }
+              }
+            },
+            "description" : "__GetAPOpenAccountsPayables__ successfully accepted"
+          },
+          "400" : {
+            "content" : {
+              "applications/json" : {
+                "example" : {
+                  "code" : "BadRequest",
+                  "ErrorDescription" : "Parameter field invalid."
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResult"
+                }
+              }
+            },
+            "description" : "Malformed request or missing fields. Check that Content-Type matches the format/encoding, and that all required fields are spelled correctly, have correct types, and valid values. \n"
+          }
+        },
+        "tags" : [ "Accounts Payable" ]
+      }
+    },
+    "/Entities/{entityId}/AP/Suppliers" : {
+      "get" : {
+        "description" : "Allows the retrieval of the supplier listing for the entity. Supplier information can be requested based on a supplier ID. \n",
+        "operationId" : "GetAPSuppliers",
+        "parameters" : [ {
+          "description" : "Identifier of the supplier to whom payment is expected or from whom unused credits have been applied.",
+          "in" : "query",
+          "name" : "supplierAccountId",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Customers"
+                }
+              }
+            },
+            "description" : "__GetAPSuppliers__ successfully accepted"
+          },
+          "400" : {
+            "content" : {
+              "applications/json" : {
+                "example" : {
+                  "code" : "BadRequest",
+                  "ErrorDescription" : "Parameter field invalid."
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResult"
+                }
+              }
+            },
+            "description" : "Malformed request or missing fields. Check that Content-Type matches the format/encoding, and that all required fields are spelled correctly, have correct types, and valid values. \n"
+          }
+        },
+        "tags" : [ "Accounts Payable" ]
+      }
+    },
+    "/Entities/{entityId}/AP/Invoices" : {
+      "get" : {
+        "description" : "Invoices has one record for each purchase order associated with each invoice. For example, if an invoice includes items from three purchase orders, there will be three records for that one invoice. The invoice will include the associated three purchase orders.\n",
+        "operationId" : "GetAPInvoices",
+        "parameters" : [ {
+          "description" : "Identifier of the supplier to whom payment is expected or from whom unused credits have been applied.",
+          "in" : "query",
+          "name" : "supplierAccountId",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "description" : "Returns all invoices with a start date equal or greater than the start date.",
+          "in" : "query",
+          "name" : "startDate",
+          "required" : true,
+          "schema" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Returns all invoices with an end date equal or less than the end date.",
+          "in" : "query",
+          "name" : "endDate",
+          "required" : true,
+          "schema" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/APInvoices"
+                }
+              }
+            },
+            "description" : "__GetAPInvoices__ successfully accepted"
+          },
+          "400" : {
+            "content" : {
+              "applications/json" : {
+                "example" : {
+                  "code" : "BadRequest",
+                  "ErrorDescription" : "Parameter field invalid."
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResult"
+                }
+              }
+            },
+            "description" : "Malformed request or missing fields. Check that Content-Type matches the format/encoding, and that all required fields are spelled correctly, have correct types, and valid values. \n"
+          }
+        },
+        "tags" : [ "Accounts Payable" ]
+      }
     }
   },
   "components" : {
@@ -802,6 +973,79 @@
         "type" : "array"
       },
       "ARInvoice" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Invoice"
+        }, {
+          "required" : [ "invoiceId", "invoiceNumber" ],
+          "type" : "object"
+        } ]
+      },
+      "APOpenAccountsPayableItems" : {
+        "items" : {
+          "$ref" : "#/components/schemas/APOpenAccountsPayable"
+        },
+        "type" : "array"
+      },
+      "APOpenAccountsPayable" : {
+        "properties" : {
+          "supplierAccountId" : {
+            "$ref" : "#/components/schemas/SupplierAccountID"
+          },
+          "transactionId" : {
+            "$ref" : "#/components/schemas/TransactionID"
+          },
+          "invoiceId" : {
+            "$ref" : "#/components/schemas/InvoiceID"
+          },
+          "transactionType" : {
+            "$ref" : "#/components/schemas/TransactionType"
+          },
+          "transactionDate" : {
+            "$ref" : "#/components/schemas/TransactionDate"
+          },
+          "transactionDueDate" : {
+            "$ref" : "#/components/schemas/TransactionDueDate"
+          },
+          "balanceAmount" : {
+            "$ref" : "#/components/schemas/FunctionalBalance"
+          },
+          "balanceAmountCurrency" : {
+            "$ref" : "#/components/schemas/FunctionalCurrencyCode"
+          },
+          "balanceAmountReporting" : {
+            "$ref" : "#/components/schemas/ReportingBalance"
+          },
+          "balanceReportingCurrency" : {
+            "$ref" : "#/components/schemas/ReportingCurrencyCode"
+          },
+          "balanceAmountLocal" : {
+            "$ref" : "#/components/schemas/LocalBalance"
+          },
+          "balanceLocalCurrency" : {
+            "$ref" : "#/components/schemas/LocalCurrencyCode"
+          },
+          "originalBalanceAmount" : {
+            "$ref" : "#/components/schemas/FunctionalAmount"
+          },
+          "originalBalanceAmountLocal" : {
+            "$ref" : "#/components/schemas/LocalAmount"
+          },
+          "originalBalanceAmountReporting" : {
+            "$ref" : "#/components/schemas/ReportingAmount"
+          },
+          "amountCreditDebitIndicator" : {
+            "$ref" : "#/components/schemas/CreditDebitIndicator"
+          }
+        },
+        "type" : "object"
+      },
+      "APInvoices" : {
+        "items" : {
+          "$ref" : "#/components/schemas/APInvoice"
+        },
+        "type" : "array"
+      },
+      "APInvoice" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/Invoice"
         }, {
@@ -1340,6 +1584,12 @@
         },
         "type" : "object",
         "x-abstract" : true
+      },
+      "SupplierAccountID" : {
+        "description" : "The unique identifier of the supplier to whom payment is expected or from whom unused credits have been applied. Typically auto-generated by the system.",
+        "example" : "123456",
+        "maxLength" : 100,
+        "type" : "string"
       },
       "JournalID" : {
         "description" : "The unique identifier for the journal entry. Typically auto-generated by the system.",
