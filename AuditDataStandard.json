@@ -479,6 +479,74 @@
         "tags" : [ "Accounts Receivable" ]
       }
     },
+    "/Entities/{entityId}/AR/CashReceived" : {
+      "get" : {
+        "description" : "Cash received contains all payment transactions (check, wire transfer, cash, and so on) received during the period. Each record represents a single cash receipt.\n",
+        "operationId" : "GetCashReceived",
+        "parameters" : [ {
+          "description" : "Identifier of the customer from whom payment is expected or to whom unused credits have been applied.",
+          "in" : "query",
+          "name" : "customerAccountId",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "description" : "Returns all receipts with a start date equal or greater than the start date.",
+          "in" : "query",
+          "name" : "startDate",
+          "required" : true,
+          "schema" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Returns all receipts with an end date equal or less than the end date.",
+          "in" : "query",
+          "name" : "endDate",
+          "required" : true,
+          "schema" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ARCashReceipts"
+                }
+              }
+            },
+            "description" : "__GetCashReceived__ successfully accepted"
+          },
+          "400" : {
+            "content" : {
+              "applications/json" : {
+                "example" : {
+                  "code" : "BadRequest",
+                  "ErrorDescription" : "Parameter field invalid."
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResult"
+                }
+              }
+            },
+            "description" : "Malformed request or missing fields. Check that Content-Type matches the format/encoding, and that all required fields are spelled correctly, have correct types, and valid values. \n"
+          }
+        },
+        "tags" : [ "Accounts Receivable" ]
+      }
+    },
     "/Entities/{entityId}/AP/OpenBalances" : {
       "get" : {
         "description" : "\nEach record represents the balance due to the supplier for one uniquely identifiable transaction. This file should be at the summary level (by invoice), not at the detailed level (by invoice line item). The sum total of the transaction amounts as of the specified date should reconcile to the total AP amount in the general ledger (GL) as of the same date. \nShould be able to pass a date and get back a list of all the invoices amounts that were outstanding at that date.\n",
@@ -976,6 +1044,53 @@
         "allOf" : [ {
           "$ref" : "#/components/schemas/Invoice"
         } ]
+      },
+      "ARCashReceipts" : {
+        "items" : {
+          "$ref" : "#/components/schemas/ARCashReceipt"
+        },
+        "type" : "array"
+      },
+      "ARCashReceipt" : {
+        "properties" : {
+          "customerAccountId" : {
+            "$ref" : "#/components/schemas/CustomerAccountID"
+          },
+          "transactionId" : {
+            "$ref" : "#/components/schemas/TransactionID"
+          },
+          "transactionDate" : {
+            "$ref" : "#/components/schemas/TransactionDate"
+          },
+          "ReferenceNumber" : {
+            "$ref" : "#/components/schemas/ReferenceNumber"
+          },
+          "ReferenceDate" : {
+            "$ref" : "#/components/schemas/ReferenceDate"
+          },
+          "balanceAmount" : {
+            "$ref" : "#/components/schemas/FunctionalBalance"
+          },
+          "balanceAmountCurrency" : {
+            "$ref" : "#/components/schemas/FunctionalCurrencyCode"
+          },
+          "balanceAmountReporting" : {
+            "$ref" : "#/components/schemas/ReportingBalance"
+          },
+          "balanceReportingCurrency" : {
+            "$ref" : "#/components/schemas/ReportingCurrencyCode"
+          },
+          "balanceAmountLocal" : {
+            "$ref" : "#/components/schemas/LocalBalance"
+          },
+          "balanceLocalCurrency" : {
+            "$ref" : "#/components/schemas/LocalCurrencyCode"
+          },
+          "EnteredBy" : {
+            "$ref" : "#/components/schemas/EnteredBy"
+          }
+        },
+        "type" : "object"
       },
       "APOpenAccountsPayableItems" : {
         "items" : {
@@ -1650,6 +1765,17 @@
         "required" : [ "invoiceId", "invoiceNumber" ],
         "type" : "object",
         "x-abstract" : true
+      },
+      "ReferenceNumber" : {
+        "description" : "Identification number for an internally or externally generated transaction (for example, check number, wire transfer number, or original document ID)",
+        "example" : "AK-2345",
+        "type" : "string"
+      },
+      "ReferenceDate" : {
+        "description" : "Date on an externally generated transaction (for example, check date or wire transfer date).",
+        "example" : "2018-12-31",
+        "format" : "date",
+        "type" : "string"
       },
       "SupplierAccountID" : {
         "description" : "The unique identifier of the supplier to whom payment is expected or from whom unused credits have been applied. Typically auto-generated by the system.",
