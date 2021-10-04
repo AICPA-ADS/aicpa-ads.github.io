@@ -975,9 +975,6 @@
       "ARInvoice" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/Invoice"
-        }, {
-          "required" : [ "invoiceId", "invoiceNumber" ],
-          "type" : "object"
         } ]
       },
       "APOpenAccountsPayableItems" : {
@@ -1119,9 +1116,6 @@
       "APInvoice" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/Invoice"
-        }, {
-          "required" : [ "invoiceId", "invoiceNumber" ],
-          "type" : "object"
         } ]
       },
       "EntityName" : {
@@ -1653,6 +1647,7 @@
             "$ref" : "#/components/schemas/Tax1TransactionAmount"
           }
         },
+        "required" : [ "invoiceId", "invoiceNumber" ],
         "type" : "object",
         "x-abstract" : true
       },
