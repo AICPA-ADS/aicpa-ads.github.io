@@ -760,9 +760,7 @@
       },
       "Periods" : {
         "example" : {
-          "application/json" : {
-            "$ref" : "./examples/Periods.json"
-          }
+          "$ref" : "./examples/Periods.json"
         },
         "items" : {
           "$ref" : "#/components/schemas/PeriodDetails"
