@@ -26,11 +26,14 @@
     "description" : "Used to request General Ledger Information",
     "name" : "General Ledger"
   }, {
-    "description" : "Used to request AR Information",
+    "description" : "Used to request Accounts Receivable Information",
     "name" : "Accounts Receivable"
   }, {
-    "description" : "Used to request AP Information",
+    "description" : "Used to request Accounts Payable Information",
     "name" : "Accounts Payable"
+  }, {
+    "description" : "Used to request Inventory Information",
+    "name" : "Inventory"
   } ],
   "paths" : {
     "/Entities" : {
@@ -481,7 +484,7 @@
     },
     "/Entities/{entityId}/AR/CashReceived" : {
       "get" : {
-        "description" : "Cash received contains all payment transactions (check, wire transfer, cash, and so on) received during the period. Each record represents a single cash receipt.\n",
+        "description" : "Payments received contains all payment transactions (check, wire transfer, cash, and so on) received during the period. Each record represents a single receipt.\n",
         "operationId" : "GetCashReceived",
         "parameters" : [ {
           "description" : "Identifier of the customer from whom payment is expected or to whom unused credits have been applied.",
@@ -714,6 +717,124 @@
         },
         "tags" : [ "Accounts Payable" ]
       }
+    },
+    "/Entities/{entityId}/AP/PaymentsMade" : {
+      "get" : {
+        "description" : "The payments made contains all payment transactions (check, wire transfer, cash, and so on) made during the period. Each record represents a single cash receipt.\n",
+        "operationId" : "GetPaymentsMade",
+        "parameters" : [ {
+          "description" : "Identifier of the supplier to whom payment is expected or from whom unused credits have been applied.",
+          "in" : "query",
+          "name" : "supplierAccountId",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "description" : "Returns all payments with a start date equal or greater than the start date.",
+          "in" : "query",
+          "name" : "startDate",
+          "required" : true,
+          "schema" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Returns all payments with an end date equal or less than the end date.",
+          "in" : "query",
+          "name" : "endDate",
+          "required" : true,
+          "schema" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/APPaymentsMade"
+                }
+              }
+            },
+            "description" : "__GetPaymentsMade__ successfully accepted"
+          },
+          "400" : {
+            "content" : {
+              "applications/json" : {
+                "example" : {
+                  "code" : "BadRequest",
+                  "ErrorDescription" : "Parameter field invalid."
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResult"
+                }
+              }
+            },
+            "description" : "Malformed request or missing fields. Check that Content-Type matches the format/encoding, and that all required fields are spelled correctly, have correct types, and valid values. \n"
+          }
+        },
+        "tags" : [ "Accounts Payable" ]
+      }
+    },
+    "/Entities/{entityId}/Inventory/InventoryOnHand" : {
+      "get" : {
+        "description" : "Captures the on-hand inventory quantities of items by location and amounts as of the specified date.\nShould be able to pass a date and get back a list of all inventory on hand at that date.\n",
+        "operationId" : "GetInventoryOnHand",
+        "parameters" : [ {
+          "description" : "Inventory on hand on a given date.",
+          "in" : "query",
+          "name" : "balanceDate",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InventoryOnHandItems"
+                }
+              }
+            },
+            "description" : "__GetInventoryOnHand__ successfully accepted"
+          },
+          "400" : {
+            "content" : {
+              "applications/json" : {
+                "example" : {
+                  "code" : "BadRequest",
+                  "ErrorDescription" : "Parameter field invalid."
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResult"
+                }
+              }
+            },
+            "description" : "Malformed request or missing fields. Check that Content-Type matches the format/encoding, and that all required fields are spelled correctly, have correct types, and valid values. \n"
+          }
+        },
+        "tags" : [ "Inventory" ]
+      }
     }
   },
   "components" : {
@@ -849,6 +970,9 @@
           },
           "budgetFlag" : {
             "$ref" : "#/components/schemas/BudgetFlag"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
           }
         },
         "required" : [ "amountBeginning", "amountCurrency", "amountEnding", "balanceAsOfDate", "glAccountNumber" ],
@@ -899,6 +1023,9 @@
           },
           "xbrlConcept" : {
             "$ref" : "#/components/schemas/XBRLConcept"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
           }
         },
         "required" : [ "glAccountName", "glAccountNumber" ],
@@ -959,6 +1086,9 @@
           },
           "amountCreditDebitIndicator" : {
             "$ref" : "#/components/schemas/CreditDebitIndicator"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
           }
         },
         "type" : "object"
@@ -1030,6 +1160,9 @@
           },
           "customerEnteredBy" : {
             "$ref" : "#/components/schemas/EnteredBy"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
           }
         },
         "type" : "object"
@@ -1068,26 +1201,29 @@
           "ReferenceDate" : {
             "$ref" : "#/components/schemas/ReferenceDate"
           },
-          "balanceAmount" : {
-            "$ref" : "#/components/schemas/FunctionalBalance"
+          "receiptAmount" : {
+            "$ref" : "#/components/schemas/FunctionalAmount"
           },
-          "balanceAmountCurrency" : {
+          "receiptAmountCurrency" : {
             "$ref" : "#/components/schemas/FunctionalCurrencyCode"
           },
-          "balanceAmountReporting" : {
-            "$ref" : "#/components/schemas/ReportingBalance"
+          "receiptAmountReporting" : {
+            "$ref" : "#/components/schemas/ReportingAmount"
           },
-          "balanceReportingCurrency" : {
+          "receiptAmountReportingCurrency" : {
             "$ref" : "#/components/schemas/ReportingCurrencyCode"
           },
-          "balanceAmountLocal" : {
-            "$ref" : "#/components/schemas/LocalBalance"
+          "receiptAmountLocal" : {
+            "$ref" : "#/components/schemas/LocalAmount"
           },
-          "balanceLocalCurrency" : {
+          "receiptAmountLocalCurrency" : {
             "$ref" : "#/components/schemas/LocalCurrencyCode"
           },
           "EnteredBy" : {
             "$ref" : "#/components/schemas/EnteredBy"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
           }
         },
         "type" : "object"
@@ -1147,6 +1283,9 @@
           },
           "amountCreditDebitIndicator" : {
             "$ref" : "#/components/schemas/CreditDebitIndicator"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
           }
         },
         "type" : "object"
@@ -1218,6 +1357,9 @@
           },
           "supplierEnteredBy" : {
             "$ref" : "#/components/schemas/EnteredBy"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
           }
         },
         "type" : "object"
@@ -1232,6 +1374,85 @@
         "allOf" : [ {
           "$ref" : "#/components/schemas/Invoice"
         } ]
+      },
+      "APPaymentsMade" : {
+        "properties" : {
+          "supplierAccountId" : {
+            "$ref" : "#/components/schemas/SupplierAccountID"
+          },
+          "transactionId" : {
+            "$ref" : "#/components/schemas/TransactionID"
+          },
+          "transactionDate" : {
+            "$ref" : "#/components/schemas/TransactionDate"
+          },
+          "referenceNumber" : {
+            "$ref" : "#/components/schemas/ReferenceNumber"
+          },
+          "referenceDate" : {
+            "$ref" : "#/components/schemas/ReferenceDate"
+          },
+          "paymentType" : {
+            "$ref" : "#/components/schemas/PaymentType"
+          },
+          "paymentAmount" : {
+            "$ref" : "#/components/schemas/FunctionalAmount"
+          },
+          "paymentAmountCurrency" : {
+            "$ref" : "#/components/schemas/FunctionalCurrencyCode"
+          },
+          "paymentAmountReporting" : {
+            "$ref" : "#/components/schemas/ReportingAmount"
+          },
+          "paymentAmountReportingCurrency" : {
+            "$ref" : "#/components/schemas/ReportingCurrencyCode"
+          },
+          "paymentAmountLocal" : {
+            "$ref" : "#/components/schemas/LocalAmount"
+          },
+          "paymentAmountLocalCurrency" : {
+            "$ref" : "#/components/schemas/LocalCurrencyCode"
+          },
+          "EnteredBy" : {
+            "$ref" : "#/components/schemas/EnteredBy"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
+          }
+        },
+        "type" : "object"
+      },
+      "InventoryOnHandItems" : {
+        "items" : {
+          "$ref" : "#/components/schemas/InventoryOnHand"
+        },
+        "type" : "array"
+      },
+      "InventoryOnHand" : {
+        "properties" : {
+          "inventoryProductId" : {
+            "$ref" : "#/components/schemas/InventoryProductID"
+          },
+          "locationID" : {
+            "$ref" : "#/components/schemas/LocationID"
+          },
+          "inventoryQuantity" : {
+            "$ref" : "#/components/schemas/InventoryQuantity"
+          },
+          "inventoryStockingUOM" : {
+            "$ref" : "#/components/schemas/InventoryStockingUOM"
+          },
+          "inventoryCostMethod" : {
+            "$ref" : "#/components/schemas/InventoryCostMethod"
+          },
+          "inventoryCost" : {
+            "$ref" : "#/components/schemas/InventoryCost"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
+          }
+        },
+        "type" : "object"
       },
       "EntityName" : {
         "description" : "The name of the entity for which the GL information is applicable.",
@@ -1321,6 +1542,9 @@
           },
           "entityIdentifier" : {
             "$ref" : "#/components/schemas/EntityIdentifier"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
           },
           "glLineItems" : {
             "items" : {
@@ -1434,6 +1658,11 @@
         "description" : "Indicates if the trial balance amount is an actual amount or a budget amount. If this field is missing from the return result then the value is presumed to be actual.",
         "enum" : [ "budget", "actual" ],
         "example" : "actual",
+        "type" : "string"
+      },
+      "SourceSystem" : {
+        "description" : "Identifies the system that the data was sourced from.",
+        "example" : "XERO - Company J",
         "type" : "string"
       },
       "DocumentInfoOimJson" : {
@@ -1760,6 +1989,9 @@
           },
           "tax1TransactionAmount" : {
             "$ref" : "#/components/schemas/Tax1TransactionAmount"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
           }
         },
         "required" : [ "invoiceId", "invoiceNumber" ],
@@ -1782,6 +2014,41 @@
         "example" : "123456",
         "maxLength" : 100,
         "type" : "string"
+      },
+      "PaymentType" : {
+        "description" : "The method by which the transaction amount was extinguished or apportioned to the debt by the supplier (for example, check, wire transfer, cash)",
+        "example" : "cash",
+        "type" : "string"
+      },
+      "InventoryProductID" : {
+        "description" : "Inventory product identifier.",
+        "example" : "SKU-12345",
+        "type" : "string"
+      },
+      "LocationID" : {
+        "description" : "Inventory location identifier.",
+        "example" : "A1234",
+        "type" : "string"
+      },
+      "InventoryQuantity" : {
+        "description" : "Count as expressed in the UOM.",
+        "example" : 30,
+        "type" : "number"
+      },
+      "InventoryStockingUOM" : {
+        "description" : "Unit of measure used associated with the quantity used for stocking inventory.",
+        "example" : "pounds",
+        "type" : "string"
+      },
+      "InventoryCostMethod" : {
+        "description" : "Description of costing practice, such as LIFO, FIFO, Average, Standard, and specific identification.",
+        "example" : "LIFO",
+        "type" : "string"
+      },
+      "InventoryCost" : {
+        "description" : "Cost per unit using the inventory cost method.",
+        "example" : 23.33,
+        "type" : "number"
       },
       "JournalID" : {
         "description" : "The unique identifier for the journal entry. Typically auto-generated by the system.",
@@ -1839,7 +2106,7 @@
       },
       "CreatedTime" : {
         "description" : "The time the journal entry was created in the system. Matches AICPA Audit Data Standard element EnteredTime.",
-        "example" : "2018-12-31",
+        "example" : "01:32",
         "format" : "time",
         "type" : "string",
         "x-AICPA-Audit-Data-Std" : "EnteredTime"
