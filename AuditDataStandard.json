@@ -1091,6 +1091,7 @@
             "$ref" : "#/components/schemas/SourceSystem"
           }
         },
+        "required" : [ "balanceAmount", "customerAccountId", "invoiceId", "transactionDate", "transactionId" ],
         "type" : "object"
       },
       "Customers" : {
@@ -1198,7 +1199,7 @@
           "ReferenceNumber" : {
             "$ref" : "#/components/schemas/ReferenceNumber"
           },
-          "ReferenceDate" : {
+          "referenceDate" : {
             "$ref" : "#/components/schemas/ReferenceDate"
           },
           "receiptAmount" : {
@@ -1219,13 +1220,14 @@
           "receiptAmountLocalCurrency" : {
             "$ref" : "#/components/schemas/LocalCurrencyCode"
           },
-          "EnteredBy" : {
+          "enteredBy" : {
             "$ref" : "#/components/schemas/EnteredBy"
           },
           "sourceSystem" : {
             "$ref" : "#/components/schemas/SourceSystem"
           }
         },
+        "required" : [ "customerAccountId", "receiptAmount", "transactionDate", "transactionId" ],
         "type" : "object"
       },
       "APOpenAccountsPayableItems" : {
@@ -1288,6 +1290,7 @@
             "$ref" : "#/components/schemas/SourceSystem"
           }
         },
+        "required" : [ "balanceAmount", "invoiceId", "supplierAccountId", "transactionDate", "transactionId" ],
         "type" : "object"
       },
       "Suppliers" : {
@@ -1413,13 +1416,14 @@
           "paymentAmountLocalCurrency" : {
             "$ref" : "#/components/schemas/LocalCurrencyCode"
           },
-          "EnteredBy" : {
+          "enteredBy" : {
             "$ref" : "#/components/schemas/EnteredBy"
           },
           "sourceSystem" : {
             "$ref" : "#/components/schemas/SourceSystem"
           }
         },
+        "required" : [ "paymentAmount", "supplierAccountId", "transactionDate", "transactionId" ],
         "type" : "object"
       },
       "InventoryOnHandItems" : {
@@ -1432,6 +1436,9 @@
         "properties" : {
           "inventoryProductId" : {
             "$ref" : "#/components/schemas/InventoryProductID"
+          },
+          "inventoryDescription" : {
+            "$ref" : "#/components/schemas/InventoryDescription"
           },
           "locationID" : {
             "$ref" : "#/components/schemas/LocationID"
@@ -1448,10 +1455,14 @@
           "inventoryCost" : {
             "$ref" : "#/components/schemas/InventoryCost"
           },
+          "balanceAsOfDate" : {
+            "$ref" : "#/components/schemas/BalanceAsOfDate"
+          },
           "sourceSystem" : {
             "$ref" : "#/components/schemas/SourceSystem"
           }
         },
+        "required" : [ "inventoryCost", "inventoryProductId", "inventoryQuantity", "inventoryStockingUOM" ],
         "type" : "object"
       },
       "EntityName" : {
@@ -2025,6 +2036,11 @@
         "example" : "SKU-12345",
         "type" : "string"
       },
+      "InventoryDescription" : {
+        "description" : "Description of Inventory item.",
+        "example" : "Titanium Oxide",
+        "type" : "string"
+      },
       "LocationID" : {
         "description" : "Inventory location identifier.",
         "example" : "A1234",
@@ -2036,8 +2052,8 @@
         "type" : "number"
       },
       "InventoryStockingUOM" : {
-        "description" : "Unit of measure used associated with the quantity used for stocking inventory.",
-        "example" : "pounds",
+        "description" : "Unit of measure used associated with the quantity used for stocking inventory. Use the Stand UOM measures defined in the XBRL units of measure registry at https://www.xbrl.org/utr/utr.xml.",
+        "example" : "kg",
         "type" : "string"
       },
       "InventoryCostMethod" : {
