@@ -1374,9 +1374,59 @@
         "type" : "array"
       },
       "APInvoice" : {
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/Invoice"
-        } ]
+        "properties" : {
+          "invoiceId" : {
+            "$ref" : "#/components/schemas/InvoiceID"
+          },
+          "invoiceNumber" : {
+            "$ref" : "#/components/schemas/InvoiceNumber"
+          },
+          "invoiceDate" : {
+            "$ref" : "#/components/schemas/InvoiceDate"
+          },
+          "invoiceFiscalYear" : {
+            "$ref" : "#/components/schemas/FiscalYear"
+          },
+          "invoicePeriod" : {
+            "$ref" : "#/components/schemas/Period"
+          },
+          "invoiceTypeName" : {
+            "$ref" : "#/components/schemas/InvoiceTypeName"
+          },
+          "invoiceDueDate" : {
+            "$ref" : "#/components/schemas/InvoiceDueDate"
+          },
+          "supplierAccountId" : {
+            "$ref" : "#/components/schemas/SupplierAccountID"
+          },
+          "settlementMethodCode" : {
+            "$ref" : "#/components/schemas/SettlementMethodCode"
+          },
+          "invoiceAmount" : {
+            "$ref" : "#/components/schemas/InvoiceTransactionAmount"
+          },
+          "invoiceAmountCurrency" : {
+            "$ref" : "#/components/schemas/InvoiceTransactionCURCode"
+          },
+          "paymentTermCode" : {
+            "$ref" : "#/components/schemas/PaymentTermCode"
+          },
+          "enteredBy" : {
+            "$ref" : "#/components/schemas/EnteredBy"
+          },
+          "tax1TypeCode" : {
+            "$ref" : "#/components/schemas/Tax1TypeCode"
+          },
+          "tax1TransactionAmount" : {
+            "$ref" : "#/components/schemas/Tax1TransactionAmount"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
+          }
+        },
+        "required" : [ "invoiceId", "invoiceNumber" ],
+        "type" : "object",
+        "x-abstract" : true
       },
       "APPaymentsMade" : {
         "properties" : {
@@ -2026,6 +2076,60 @@
         "maxLength" : 100,
         "type" : "string"
       },
+      "InvoiceNumber" : {
+        "description" : "Identification number for an internally generated invoice.",
+        "example" : "1234567890",
+        "maxLength" : 100,
+        "type" : "string"
+      },
+      "InvoiceDate" : {
+        "description" : "The date of the invoice, regardless of the date the invoice is created. This is the date from which the due date is calculated based on the invoice terms.",
+        "format" : "date",
+        "maxLength" : 10,
+        "type" : "string"
+      },
+      "InvoiceTypeName" : {
+        "description" : "The name of the invoice type. The documents are classified according  to business content.",
+        "maxLength" : 60,
+        "type" : "string"
+      },
+      "InvoiceDueDate" : {
+        "description" : "The date payment is due from the customer. Aging of a receivable is usually calculated based on this date.",
+        "format" : "date",
+        "maxLength" : 10,
+        "type" : "string"
+      },
+      "SettlementMethodCode" : {
+        "description" : "The code value or indicator of the settlement method used for cash receipt from customers (i.e. sales) and cash payment to suppliers (i.e. purchase); for example, check, wire transfer and cash. Shall match the SettlementMethodCode in the BAS_Settlement_Method table.",
+        "example" : "sales",
+        "maxLength" : 60,
+        "type" : "string"
+      },
+      "InvoiceTransactionAmount" : {
+        "description" : "The transaction monetary amount  recorded in the functional or group currency. No multi-currency translation should be performed on this amount because all transactions are recorded in a single currency.",
+        "format" : "float",
+        "type" : "number"
+      },
+      "InvoiceTransactionCURCode" : {
+        "description" : "The transactional currency appeared in the invoice (ISO 4217:2015). Shall match the CurrencyCode in the BAS_Currency table.",
+        "maxLength" : 3,
+        "type" : "string"
+      },
+      "PaymentTermCode" : {
+        "description" : "The code of the payment term. Shall match the PaymentTermCode in the BAS_Payment_Term table; for example, cash on delivery, payment 30 days after delivery date.",
+        "maxLength" : 80,
+        "type" : "string"
+      },
+      "Tax1TypeCode" : {
+        "description" : "Code for Tax1 type. This field shall match the TaxTypeCode in the BAS_Tax_Type table.",
+        "maxLength" : 25,
+        "type" : "string"
+      },
+      "Tax1TransactionAmount" : {
+        "description" : "The amount of Tax1 included in the transaction. Recorded in transaction currency.",
+        "format" : "float",
+        "type" : "number"
+      },
       "PaymentType" : {
         "description" : "The method by which the transaction amount was extinguished or apportioned to the debt by the supplier (for example, check, wire transfer, cash)",
         "example" : "cash",
@@ -2196,60 +2300,6 @@
         },
         "required" : [ "amount", "amountCreditDebitIndicator", "amountCurrency", "glAccountNumber" ],
         "type" : "object"
-      },
-      "InvoiceNumber" : {
-        "description" : "Identification number for an internally generated invoice.",
-        "example" : "1234567890",
-        "maxLength" : 100,
-        "type" : "string"
-      },
-      "InvoiceDate" : {
-        "description" : "The date of the invoice, regardless of the date the invoice is created. This is the date from which the due date is calculated based on the invoice terms.",
-        "format" : "date",
-        "maxLength" : 10,
-        "type" : "string"
-      },
-      "InvoiceTypeName" : {
-        "description" : "The name of the invoice type. The documents are classified according  to business content.",
-        "maxLength" : 60,
-        "type" : "string"
-      },
-      "InvoiceDueDate" : {
-        "description" : "The date payment is due from the customer. Aging of a receivable is usually calculated based on this date.",
-        "format" : "date",
-        "maxLength" : 10,
-        "type" : "string"
-      },
-      "SettlementMethodCode" : {
-        "description" : "The code value or indicator of the settlement method used for cash receipt from customers (i.e. sales) and cash payment to suppliers (i.e. purchase); for example, check, wire transfer and cash. Shall match the SettlementMethodCode in the BAS_Settlement_Method table.",
-        "example" : "sales",
-        "maxLength" : 60,
-        "type" : "string"
-      },
-      "InvoiceTransactionAmount" : {
-        "description" : "The transaction monetary amount  recorded in the functional or group currency. No multi-currency translation should be performed on this amount because all transactions are recorded in a single currency.",
-        "format" : "float",
-        "type" : "number"
-      },
-      "InvoiceTransactionCURCode" : {
-        "description" : "The transactional currency appeared in the invoice (ISO 4217:2015). Shall match the CurrencyCode in the BAS_Currency table.",
-        "maxLength" : 3,
-        "type" : "string"
-      },
-      "PaymentTermCode" : {
-        "description" : "The code of the payment term. Shall match the PaymentTermCode in the BAS_Payment_Term table; for example, cash on delivery, payment 30 days after delivery date.",
-        "maxLength" : 80,
-        "type" : "string"
-      },
-      "Tax1TypeCode" : {
-        "description" : "Code for Tax1 type. This field shall match the TaxTypeCode in the BAS_Tax_Type table.",
-        "maxLength" : 25,
-        "type" : "string"
-      },
-      "Tax1TransactionAmount" : {
-        "description" : "The amount of Tax1 included in the transaction. Recorded in transaction currency.",
-        "format" : "float",
-        "type" : "number"
       },
       "JournalIDLineNumber" : {
         "description" : "Identifier that is unique for each line within a journal entry. Matches AICPA Audit Data Standard element JournalIDLineNumber.",
