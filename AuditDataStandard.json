@@ -1614,7 +1614,7 @@
             "$ref" : "#/components/schemas/SourceSystem"
           }
         },
-        "required" : [ "inventoryProductId" ],
+        "required" : [ "inventoryProductId", "transactionDate", "transactionQuantity" ],
         "type" : "object"
       },
       "EntityName" : {
