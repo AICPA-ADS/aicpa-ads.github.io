@@ -1490,6 +1490,9 @@
           "inventoryDescription" : {
             "$ref" : "#/components/schemas/InventoryDescription"
           },
+          "inventoryBarCode" : {
+            "$ref" : "#/components/schemas/Inventory_Bar_Code"
+          },
           "locationID" : {
             "$ref" : "#/components/schemas/LocationID"
           },
@@ -2143,6 +2146,11 @@
       "InventoryDescription" : {
         "description" : "Description of Inventory item.",
         "example" : "Titanium Oxide",
+        "type" : "string"
+      },
+      "Inventory_Bar_Code" : {
+        "description" : "UPC product code.",
+        "example" : "122334423432",
         "type" : "string"
       },
       "LocationID" : {
