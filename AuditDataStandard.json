@@ -835,6 +835,66 @@
         },
         "tags" : [ "Inventory" ]
       }
+    },
+    "/Entities/{entityId}/Inventory/InventoryTransactions" : {
+      "get" : {
+        "description" : "Captures all transaction history (for example, receipts, shipments, transfers, returns, adjustments) affecting inventory accounts during the time period specified.\nShould be able to pass a start and end date and get back a list of all transactions during the period.\n",
+        "operationId" : "GetInventoryTransactions",
+        "parameters" : [ {
+          "description" : "Returns all invoices with a start date equal or greater than the start date.",
+          "in" : "query",
+          "name" : "startDate",
+          "required" : true,
+          "schema" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Returns all invoices with an end date equal or less than the end date.",
+          "in" : "query",
+          "name" : "endDate",
+          "required" : true,
+          "schema" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Entity Identifier.  UID of the entity. Can be defined by the implementer of the API does not imply that a standard identifier is used. If no entity id identifier is provided and the requested system has multiple entities the API implementer determines entity to return.",
+          "in" : "path",
+          "name" : "entityId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InventoryTransactionItems"
+                }
+              }
+            },
+            "description" : "__GetInventoryTransactions__ successfully accepted"
+          },
+          "400" : {
+            "content" : {
+              "applications/json" : {
+                "example" : {
+                  "code" : "BadRequest",
+                  "ErrorDescription" : "Parameter field invalid."
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResult"
+                }
+              }
+            },
+            "description" : "Malformed request or missing fields. Check that Content-Type matches the format/encoding, and that all required fields are spelled correctly, have correct types, and valid values. \n"
+          }
+        },
+        "tags" : [ "Inventory" ]
+      }
     }
   },
   "components" : {
@@ -1518,6 +1578,45 @@
         "required" : [ "inventoryCost", "inventoryProductId", "inventoryQuantity", "inventoryStockingUOM" ],
         "type" : "object"
       },
+      "InventoryTransactionItems" : {
+        "items" : {
+          "$ref" : "#/components/schemas/InventoryTransaction"
+        },
+        "type" : "array"
+      },
+      "InventoryTransaction" : {
+        "$ref" : "#/components/schemas/InventoryTransactions"
+      },
+      "InventoryTransactions" : {
+        "properties" : {
+          "inventoryProductId" : {
+            "$ref" : "#/components/schemas/InventoryProductID"
+          },
+          "transactionType" : {
+            "$ref" : "#/components/schemas/InventoryTransactionType"
+          },
+          "transactionDate" : {
+            "$ref" : "#/components/schemas/TransactionDate"
+          },
+          "transactionQuantity" : {
+            "$ref" : "#/components/schemas/TransactionQuantity"
+          },
+          "transactionDescription" : {
+            "$ref" : "#/components/schemas/TransactionDescription"
+          },
+          "inventoryGLLineDebitAccount" : {
+            "$ref" : "#/components/schemas/GLAccountNumber"
+          },
+          "inventoryGLLineCreditAccount" : {
+            "$ref" : "#/components/schemas/GLAccountNumber"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
+          }
+        },
+        "required" : [ "inventoryProductId" ],
+        "type" : "object"
+      },
       "EntityName" : {
         "description" : "The name of the entity for which the GL information is applicable.",
         "example" : "ABC-CO",
@@ -2177,6 +2276,22 @@
         "description" : "Cost per unit using the inventory cost method.",
         "example" : 23.33,
         "type" : "number"
+      },
+      "InventoryTransactionType" : {
+        "description" : "Different software products use different codes and descriptions for the primary inventory-specific actions that take place in inventory transactions related to the movement of goods related to trade, quantity adjustments from internal business events and cost adjustments, due to market factors or damage. While the client and auditor can agree on codes and descriptions to describe the impact on inventory quantities and costs, the use of this set of standard entries can provide an automated understanding of the transaction.",
+        "enum" : [ "Damage", "Increase_Due_To_Revaluation", "Lower_Of_Cost_or_Market_Realization", "Moved_From_Production", "Moved_To_Production", "Obsolete", "Physical_Count_Adjustment", "Receipt", "Return", "Scrapped", "Shipment", "Transfer" ],
+        "example" : "Receipt",
+        "type" : "string"
+      },
+      "TransactionQuantity" : {
+        "description" : "Quantity or item affected expressed in location stocking unit. Enter stock in as a positive and stock out as a negative.",
+        "example" : 129,
+        "type" : "number"
+      },
+      "TransactionDescription" : {
+        "description" : "Description of transaction.",
+        "example" : "Received Inventory from supplier.",
+        "type" : "string"
       },
       "JournalID" : {
         "description" : "The unique identifier for the journal entry. Typically auto-generated by the system.",
