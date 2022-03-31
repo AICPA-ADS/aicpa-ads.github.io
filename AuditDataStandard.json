@@ -138,6 +138,48 @@
         "tags" : [ "Entities" ]
       }
     },
+    "/Entities/{entityId}/Users" : {
+      "get" : {
+        "description" : "Allows requesting user details from the API based on a Userid.\n",
+        "operationId" : "GetUsers",
+        "parameters" : [ {
+          "description" : "A unique identifier of individuals entering transactions into the ERP system.",
+          "in" : "query",
+          "name" : "userId",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Users"
+                }
+              }
+            },
+            "description" : "_users_ successfully accepted"
+          },
+          "400" : {
+            "content" : {
+              "applications/json" : {
+                "example" : {
+                  "code" : "BadRequest",
+                  "ErrorDescription" : "Parameter field invalid."
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResult"
+                }
+              }
+            },
+            "description" : "Malformed request or missing fields. Check that Content-Type matches the format/encoding, and that all required fields are spelled correctly, have correct types, and valid values. \n"
+          }
+        },
+        "tags" : [ "Users" ]
+      }
+    },
     "/Entities/{entityId}/GL/Journals" : {
       "get" : {
         "description" : "Allows searching for General Ledger Journal Transactions\n",
@@ -969,6 +1011,44 @@
         "required" : [ "endDatePeriod", "periodName", "periodType", "startDatePeriod" ],
         "type" : "object"
       },
+      "Users" : {
+        "items" : {
+          "$ref" : "#/components/schemas/User"
+        },
+        "type" : "array"
+      },
+      "User" : {
+        "properties" : {
+          "firstName" : {
+            "$ref" : "#/components/schemas/FirstName"
+          },
+          "lastName" : {
+            "$ref" : "#/components/schemas/LastName"
+          },
+          "roleResponsibility" : {
+            "$ref" : "#/components/schemas/RoleResponsibility"
+          },
+          "title" : {
+            "$ref" : "#/components/schemas/Title"
+          },
+          "userActiveModifiedDate" : {
+            "$ref" : "#/components/schemas/UserActiveModifiedDate"
+          },
+          "userActiveStatus" : {
+            "$ref" : "#/components/schemas/UserActiveStatus"
+          },
+          "userId" : {
+            "$ref" : "#/components/schemas/UserId"
+          },
+          "department" : {
+            "$ref" : "#/components/schemas/Department"
+          },
+          "sourceSystem" : {
+            "$ref" : "#/components/schemas/SourceSystem"
+          }
+        },
+        "type" : "object"
+      },
       "GLDetails" : {
         "items" : {
           "$ref" : "#/components/schemas/GLDetail"
@@ -1647,6 +1727,51 @@
         "example" : "Year",
         "type" : "string"
       },
+      "FirstName" : {
+        "description" : "The first (given) name of the person.",
+        "example" : "Luke",
+        "type" : "string"
+      },
+      "LastName" : {
+        "description" : "The last (family) name of the person.",
+        "example" : "Lucky",
+        "type" : "string"
+      },
+      "RoleResponsibility" : {
+        "description" : "The persons functional role or primary responsibility.",
+        "example" : "Account Payable",
+        "type" : "string"
+      },
+      "Title" : {
+        "description" : "The title of the person.",
+        "example" : "Accounting Manager",
+        "type" : "string"
+      },
+      "UserActiveModifiedDate" : {
+        "description" : "The date of user activation or termination.",
+        "example" : "2021-12-31",
+        "type" : "date"
+      },
+      "UserActiveStatus" : {
+        "description" : "The status of users (for identification of transactions by inactive users). The value of this field should be either 'true' if active  or false if inactive.",
+        "example" : true,
+        "type" : "boolean"
+      },
+      "UserId" : {
+        "description" : "A unique identifier of individuals entering transactions into the ERP system. This field is used to join information in this request to other requests based on the fields EnteredBy, LastModifiedBy, and ApprovedPersonID.",
+        "example" : "U1234",
+        "type" : "string"
+      },
+      "Department" : {
+        "description" : "The department the person is part of (for example, accounting).",
+        "example" : "Accounting",
+        "type" : "string"
+      },
+      "SourceSystem" : {
+        "description" : "Identifies the system that the data was sourced from.",
+        "example" : "XERO - Company J",
+        "type" : "string"
+      },
       "GLDetail" : {
         "properties" : {
           "journalId" : {
@@ -1815,11 +1940,6 @@
         "description" : "Indicates if the trial balance amount is an actual amount or a budget amount. If this field is missing from the return result then the value is presumed to be actual.",
         "enum" : [ "budget", "actual" ],
         "example" : "actual",
-        "type" : "string"
-      },
-      "SourceSystem" : {
-        "description" : "Identifies the system that the data was sourced from.",
-        "example" : "XERO - Company J",
         "type" : "string"
       },
       "DocumentInfoOimJson" : {
