@@ -23,6 +23,9 @@
     "description" : "Used across modules.",
     "name" : "Entities"
   }, {
+    "description" : "Used to request System User Information",
+    "name" : "Users"
+  }, {
     "description" : "Used to request General Ledger Information",
     "name" : "General Ledger"
   }, {
@@ -1043,6 +1046,9 @@
           "department" : {
             "$ref" : "#/components/schemas/Department"
           },
+          "userTimeZone" : {
+            "$ref" : "#/components/schemas/UserTimeZone"
+          },
           "sourceSystem" : {
             "$ref" : "#/components/schemas/SourceSystem"
           }
@@ -1765,6 +1771,11 @@
       "Department" : {
         "description" : "The department the person is part of (for example, accounting).",
         "example" : "Accounting",
+        "type" : "string"
+      },
+      "UserTimeZone" : {
+        "description" : "The time zone in which the user is based, in the format (UTC-07:00) for Mountain Time USA or (UTC+10:00) for Brisbane Australia.",
+        "example" : "(UTC-07:00)",
         "type" : "string"
       },
       "SourceSystem" : {
