@@ -1764,7 +1764,8 @@
       "UserActiveModifiedDate" : {
         "description" : "The date of user activation or termination.",
         "example" : "2021-12-31",
-        "type" : "date"
+        "format" : "date",
+        "type" : "string"
       },
       "UserActiveStatus" : {
         "description" : "The status of users (for identification of transactions by inactive users). The value of this field should be either 'true' if active  or false if inactive.",
@@ -2541,7 +2542,7 @@
             "$ref" : "#/components/schemas/TransactionCurrencyCode"
           }
         },
-        "required" : [ "glAccountNumber" ],
+        "required" : [ "glAccountNumber", "transactionAmount", "transactionCurrency" ],
         "type" : "object"
       },
       "JournalIDLineNumber" : {
